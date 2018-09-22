@@ -1,0 +1,109 @@
+<!-- SPDX-License-Identifier: 0BSD -->
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252"></head><body>Risk: Europe<br>
+Combat Resolver<br><br>
+<script>
+
+
+
+
+var regions = ['Olive', 'Orange', 'Purple', 'Red', 'Yellow', 'Blue', 'Green'];
+
+var us = {'Yellow': ['Blue', 'Olive'],
+          'Blue': ['Yellow', 'Olive', 'Purple'],
+          'Purple': ['Blue', 'Olive', 'Orange'],
+          'Orange': ['Purple', 'Olive', 'Red'],
+          'Olive': ['Purple', 'Blue', 'Yellow', 'Red', 'Orange'],
+          'Red': ['Olive', 'Orange', 'Green'],
+          'Green': ['Red']
+         };
+
+var europe = {'Yellow': ['Red', 'Olive', 'Green', 'Blue'],
+              'Blue': ['Yellow', 'Green'],
+              'Purple': ['Red', 'Olive'],
+              'Orange': ['Olive', 'Green'],
+              'Olive': ['Purple', 'Green', 'Yellow', 'Red', 'Orange'],
+              'Red': ['Olive', 'Purple', 'Yellow'],
+              'Green': ['Orange', 'Olive', 'Yellow', 'Blue']
+             };
+
+function rand(count)
+{
+    return Math.floor(Math.random() * count);
+}
+
+function shuffle(array)
+{
+    for (let i = array.length - 1; i > 0; i--) {
+        let j = rand(i + 1);
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+function contains(array, item)
+{
+    return array.indexOf(item) > -1;
+}
+
+function create_list(map, count)
+{
+    var list = [regions[rand(regions.length)]];
+
+    for (var r = 1; r < count; r++) {
+        var cur = list[r - 1];
+        var next = map[cur][rand(map[cur].length)];
+        if (contains(list, next) === true) {
+            r = 0;
+            list = [list[0]];
+            continue;
+        }
+        list.push(next);
+    }
+
+    return list;
+}
+
+shuffle(regions);
+
+document.writeln("<br>United States:");
+document.writeln("<br>Two or three players: ", create_list(us, 3));
+document.writeln("<br>Four players: ", create_list(us, 4));
+document.writeln("<br>Fix or six players: ", create_list(us, 5));
+
+document.writeln("<br><br>Europe:");
+document.writeln("<br>Two or three players: ", create_list(europe, 3));
+document.writeln("<br>Four players: ", create_list(europe, 4));
+document.writeln("<br>Fix or six players: ", create_list(europe, 5));
+</script>
+
+<form id="form">
+<table>
+<th></th>
+<th>Attacker</th>
+<th>Defender</th>
+</tr>
+<tr>
+<td>Siege Weapons:</td>
+<td><input type="text" name="s1"></td>
+<td><input type="text" name="s2"></td>
+</tr>
+<tr>
+<td>Archers:</td>
+<td><input type="text" name="a1"></td>
+<td><input type="text" name="a2"></td>
+</tr>
+<tr>
+<td>Cavalry:</td>
+<td><input type="text" name="c1"></td>
+<td><input type="text" name="c2"></td>
+</tr>
+<tr>
+<td>Footmen:</td>
+<td><input type="text" name="f1"></td>
+<td><input type="text" name="f2"></td>
+</tr>
+</table>
+<button onclick="myFunction()">Battle!</button>
+</form>
+
+</body></html>
