@@ -1,11 +1,15 @@
 <!-- SPDX-License-Identifier: 0BSD -->
 <html><head>
-<meta http-equiv="content-type" content="text/html; charset=windows-1252"></head><body>Risk: Europe<br>
-Combat Resolver<br><br>
+<style>
+th, td {
+    border: 1px solid black;
+    padding: 15px;
+    text-align: left;
+}
+</style>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252"></head><body>Power Grid Deluxe<br>
+Initial Region Selector<br><br>
 <script>
-
-
-
 
 var regions = ['Olive', 'Orange', 'Purple', 'Red', 'Yellow', 'Blue', 'Green'];
 
@@ -60,50 +64,15 @@ function create_list(map, count)
         list.push(next);
     }
 
-    return list;
+    return list.join(', ');
 }
 
 shuffle(regions);
 
-document.writeln("<br>United States:");
-document.writeln("<br>Two or three players: ", create_list(us, 3));
-document.writeln("<br>Four players: ", create_list(us, 4));
-document.writeln("<br>Fix or six players: ", create_list(us, 5));
+document.writeln("<table><tr><th>Players</th><th>United States</th><th>Europe</th></tr>");
+document.writeln("<tr><td>2-3</td><td>", create_list(us, 3), "</td><td>", create_list(europe, 3), "</td></tr>");
+document.writeln("<tr><td>4</td><td>", create_list(us, 4), "</td><td>", create_list(europe, 4), "</td></tr>");
+document.writeln("<tr><td>5-6</td><td>", create_list(us, 5), "</td><td>", create_list(europe, 5), "</td></tr>");
 
-document.writeln("<br><br>Europe:");
-document.writeln("<br>Two or three players: ", create_list(europe, 3));
-document.writeln("<br>Four players: ", create_list(europe, 4));
-document.writeln("<br>Fix or six players: ", create_list(europe, 5));
 </script>
-
-<form id="form">
-<table>
-<th></th>
-<th>Attacker</th>
-<th>Defender</th>
-</tr>
-<tr>
-<td>Siege Weapons:</td>
-<td><input type="text" name="s1"></td>
-<td><input type="text" name="s2"></td>
-</tr>
-<tr>
-<td>Archers:</td>
-<td><input type="text" name="a1"></td>
-<td><input type="text" name="a2"></td>
-</tr>
-<tr>
-<td>Cavalry:</td>
-<td><input type="text" name="c1"></td>
-<td><input type="text" name="c2"></td>
-</tr>
-<tr>
-<td>Footmen:</td>
-<td><input type="text" name="f1"></td>
-<td><input type="text" name="f2"></td>
-</tr>
-</table>
-<button onclick="myFunction()">Battle!</button>
-</form>
-
 </body></html>
