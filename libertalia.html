@@ -1,46 +1,70 @@
 <!DOCTYPE html>
 <!-- SPDX-License-Identifier: 0BSD -->
-<html lang="en">
-<head>
-<meta charset=UTF-8>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<style>
+html,
+body {
+  width: 100vw;
+  font-size: 3vmax; 
+}
+
+div {
+  width: 100%;
+  font-size: 4vmax; 
+}
+
+button {
+  width: 99%;
+  font-size: 4vmax; 
+  margin-left: 0;
+}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0">
 <title>Libertalia: Winds of Galecrest</title>
 </head>
 <body>
 Libertalia: Winds of Galecrest<br>
 Deck Randomizer<br><br>
-<button onclick="generate()">Shuffle Deck</button>
+<button onclick="reschuffle()">Shuffle Deck (Press Twice)</button>
+<br>
 <br>
 <button onclick="show('day1')">Show Day 1</button>
-<div id="day1" style="display: none;">
-</div><br>
+<div id="day1" style="display: block;">6&nbsp;&nbsp;&nbsp;20&nbsp;&nbsp;&nbsp;24&nbsp;&nbsp;&nbsp;34&nbsp;&nbsp;&nbsp;36&nbsp;&nbsp;&nbsp;38</div>
+<br>
+<br>
 <button onclick="show('day2')">Show Day 2</button>
-<div id="day2" style="display: none;">
-</div><br>
+<div id="day2" style="display: block;">3&nbsp;&nbsp;&nbsp;8&nbsp;&nbsp;&nbsp;11&nbsp;&nbsp;&nbsp;30&nbsp;&nbsp;&nbsp;32&nbsp;&nbsp;&nbsp;39</div>
+<br>
+<br>
 <button onclick="show('day3')">Show Day 3</button>
-<div id="day3" style="display: none;">
-</div><br>
-</body>
+<div id="day3" style="display: none;">5&nbsp;&nbsp;&nbsp;7&nbsp;&nbsp;&nbsp;14&nbsp;&nbsp;&nbsp;17&nbsp;&nbsp;&nbsp;18&nbsp;&nbsp;&nbsp;35</div>
+
 <script>
 var deck;
 
 // Shuffles an array of numbers
 function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        let j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
+  for (let i = array.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
 }
+
+var first_click = true;
 
 // Unhide a div block
 function show(div) {
-    document.getElementById(div).style.display = 'block';
+  document.getElementById(div).style.display = 'block';
+  first_click = true;
 }
 
 // Updates the numbers in each day
 function update() {
-  document.getElementById("day1").innerHTML = deck.slice(0, 6).sort();
-  document.getElementById("day2").innerHTML = deck.slice(6, 12).sort();
-  document.getElementById("day3").innerHTML = deck.slice(12, 18).sort();
+  document.getElementById("day1").innerHTML = deck.slice(0, 6).sort().join('&nbsp;&nbsp;&nbsp;');
+  document.getElementById("day2").innerHTML = deck.slice(6, 12).sort().join('&nbsp;&nbsp;&nbsp;');
+  document.getElementById("day3").innerHTML = deck.slice(12, 18).sort().join('&nbsp;&nbsp;&nbsp;');
 }
 
 // Generate a new shuffled list, updates the web page, and saves the list in a cookie
@@ -49,6 +73,20 @@ function generate() {
   shuffle(deck);
   update();
   document.cookie = deck.toString() + "; max-age=" + (60 * 60 * 24 * 7) + ";";
+}
+
+// Reshuffle the deck and update the web page
+// Require the button to be pressed twice, for safety
+function reschuffle() {
+  if (first_click) {
+    first_click = false;
+  } else {
+    document.getElementById('day1').style.display = 'none';
+    document.getElementById('day2').style.display = 'none';
+    document.getElementById('day3').style.display = 'none';
+    generate();
+    first_click = true;
+  }
 }
 
 function check(num) {
@@ -64,3 +102,4 @@ if ((deck.length == 40) && deck.every(check)) {
   generate();
 }
 </script>
+</body></html>
