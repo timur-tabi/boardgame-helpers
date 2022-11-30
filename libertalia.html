@@ -19,6 +19,13 @@ button {
   font-size: 4vmax; 
   margin-left: 0;
 }
+@font-face {
+    font-family: "Noto Sans Symbols 2";
+    src: url("NotoSansSymbols2-Regular.ttf") format("truetype");
+}
+div.customfont {
+    font-family: "Noto Sans Symbols 2";
+}
 </style>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0">
@@ -40,6 +47,15 @@ Deck Randomizer<br><br>
 <br>
 <button onclick="show('day3')">Show Day 3</button>
 <div id="day3" style="display: none;"></div>
+
+<div class="customfont" style="text-align:center;font-size:6vmax">
+    <span id="o0"></span>
+    <span id="o1"></span>
+    <span id="o2"></span>
+    <span id="o3"></span>
+    <span id="o4"></span>
+    <span id="o5"></span>
+</div>
 
 <script>
 var deck;
@@ -91,6 +107,18 @@ function reschuffle() {
 
 function check(num) {
   return Number.isInteger(num) && (num >= 1) && (num <= 40);
+}
+
+colors = [ "color:purple",
+           "color:white;text-shadow:-1px -1px black, 1px 1px black, 1px -1px black, -1px 1px black",
+           "color:black",
+           "color:green",
+           "color:blue",
+           "color:red" ];
+
+shuffle(colors);
+for (let i = 0; i < 6; i++) {
+    document.getElementById('o' + i).innerHTML = `<span style="${colors[i]}">&#11203;</span>`;
 }
 
 deck = Uint8Array.from(document.cookie.split(',').map(Number));
