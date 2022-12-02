@@ -1,6 +1,7 @@
+<!DOCTYPE html>
 <!-- SPDX-License-Identifier: 0BSD -->
 Valerian: The Alpha Missions<br>
-Initial board setup<br><br>
+Initial board setup<br>
 <script>
 function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -13,11 +14,14 @@ var cols = 'ABCDEFG';
 var tiles = [];
 for (var c = 0; c < 7; c++) {
     for (var r = 1; r <= 7; r++) {
-        tiles.push(cols.charAt(c) + r);
+        // Skip D4, the center of the board
+        if ((c != 3) | (r != 4)) {
+            tiles.push(cols.charAt(c) + r);
+        }
     }
 }
 
 shuffle(tiles);
 document.writeln("<br>Level 3: ", tiles.slice(0,5).sort());
-document.writeln("<br>Level 2: ", tiles.slice(5,15).sort());
+document.writeln("<br><br>Level 2: ", tiles.slice(5,15).sort());
 </script>
