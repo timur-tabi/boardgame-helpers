@@ -1,6 +1,10 @@
 <!-- SPDX-License-Identifier: 0BSD -->
+<!doctype html>
 <html><head>
-<meta http-equiv="content-type" content="text/html; charset=windows-1252"></head><body>Risk: Europe<br>
+<title>Risk: Europe</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+</head>
+<body>Risk: Europe<br>
 Combat Resolver<br><br>
 
 <script>
@@ -12,27 +16,34 @@ function roll()
 }
 
 // Rolls a die 'count' times and returns the number of dice with value >= 'minimum'
-function rolls(player, count, minimum)
+function rolls(count, minimum, player)
 {
     var hits = 0;
+    var o = document.getElementById("output");
 
     if (count == 0) {
         return 0;
     }
 
-    o.innerHTML += "<br>" + player + " rolls ";
+    if (player !== undefined) {
+        o.innerHTML += "<br>" + player + " rolls ";
+    }
 
     for (var i = 0; i < count; i++) {
         var r = roll();
 
-        o.innerHTML += r + " ";
+        if (player !== undefined) {
+            o.innerHTML += r + " ";
+        }
 
         if (r >= minimum) {
             hits++;
         }
     }
 
-    o.innerHTML += " and gets " + hits + " hits\n";
+    if (player !== undefined) {
+        o.innerHTML += " and gets " + hits + " hits\n";
+    }
     return hits;
 }
 
@@ -84,6 +95,8 @@ function remove(p, count)
 
 function show_units(a, d)
 {
+    var o = document.getElementById("output");
+
     if (a.reduce(sum) == 0) {
         o.innerHTML += "<br>Attacker: ELIMINATED\n";
     } else {
@@ -116,73 +129,100 @@ function do_hits(a, hits_on_attacker, d, hits_on_defender)
 
 // Performs Rank 1 attack
 // Returns true is one or both armies are eliminated
-function rank1(a, d)
+function rank1(a, d, show)
 {
+    var hits_on_defender, hits_on_attacker, done;
+
     if (!a[0] && !d[0]) {
         return false;
     }
 
-    o.innerHTML += "<br><br>Rank 1 -- Siege Weapons\n";
+    if (show) {
+        var o = document.getElementById("output");
+        o.innerHTML += "<br><br>Rank 1 -- Siege Weapons\n";
 
-    var hits_on_defender = rolls("Attacker", 2 * a[0], 3);
-    var hits_on_attacker = rolls("Defender", 2 * d[0], 3);
+        hits_on_defender = rolls(2 * a[0], 3, "Attacker");
+        hits_on_attacker = rolls(2 * d[0], 3, "Defender");
 
-    var done = do_hits(a, hits_on_attacker, d, hits_on_defender);
-    show_units(a, d);
+        done = do_hits(a, hits_on_attacker, d, hits_on_defender);
+        show_units(a, d);
+    } else {
+        hits_on_defender = rolls(2 * a[0], 3);
+        hits_on_attacker = rolls(2 * d[0], 3);
 
+        done = do_hits(a, hits_on_attacker, d, hits_on_defender);
+    }
 
     return done;
 }
 
 // Performs Rank 2 attack
 // Returns true is one or both armies are eliminated
-function rank2(a, d)
+function rank2(a, d, show)
 {
+    var hits_on_defender, hits_on_attacker, done;
+
     if (!a[1] && !d[1]) {
         return false;
     }
 
-    o.innerHTML += "<br><br>Rank 2 -- Archers\n";
+    if (show) {
+        var o = document.getElementById("output");
+        o.innerHTML += "<br><br>Rank 2 -- Archers\n";
 
-    var hits_on_defender = rolls("Attacker", a[1], 5);
-    var hits_on_attacker = rolls("Defender", d[1], 5);
+        hits_on_defender = rolls(a[1], 5, "Attacker");
+        hits_on_attacker = rolls(d[1], 5, "Defender");
 
-    var done = do_hits(a, hits_on_attacker, d, hits_on_defender);
-    show_units(a, d);
+        done = do_hits(a, hits_on_attacker, d, hits_on_defender);
+        show_units(a, d);
+    } else {
+        hits_on_defender = rolls(a[1], 5);
+        hits_on_attacker = rolls(d[1], 5);
+
+        done = do_hits(a, hits_on_attacker, d, hits_on_defender);
+    }
 
     return done;
 }
 
 // Performs Rank 3 attack
 // Returns true is one or both armies are eliminated
-function rank3(a, d)
+function rank3(a, d, show)
 {
+    var hits_on_defender, hits_on_attacker, done;
+
     if (!a[2] && !d[2]) {
         return false;
     }
 
-    o.innerHTML += "<br><br>Rank 3 -- Cavalry\n";
+    if (show) {
+        var o = document.getElementById("output");
+        o.innerHTML += "<br><br>Rank 3 -- Cavalry\n";
 
-    var hits_on_defender = rolls("Attacker", a[2], 3);
-    var hits_on_attacker = rolls("Defender", d[2], 3);
+        hits_on_defender = rolls(a[2], 3, "Attacker");
+        hits_on_attacker = rolls(d[2], 3, "Defender");
 
-    var done = do_hits(a, hits_on_attacker, d, hits_on_defender);
-    show_units(a, d);
+        done = do_hits(a, hits_on_attacker, d, hits_on_defender);
+        show_units(a, d);
+    } else {
+        hits_on_defender = rolls(a[2], 3);
+        hits_on_attacker = rolls(d[2], 3);
+
+        done = do_hits(a, hits_on_attacker, d, hits_on_defender);
+    }
 
     return done;
 }
 
 // Performs Rank 4 attack
 // Returns true is one or both armies are eliminated
-function rank4(a, d)
+function rank4(a, d, show)
 {
     var a_count = a.reduce(sum);
     var d_count = d.reduce(sum);
-    var a_rolls = []
-    var d_rolls = []
-    var done
-
-    o.innerHTML += "<br><br>Rank 4 - All Units\n";
+    var a_rolls = [];
+    var d_rolls = [];
+    var done;
 
     if (a_count >= 3) {
         a_rolls = [roll(), roll(), roll()];
@@ -201,8 +241,12 @@ function rank4(a, d)
     a_rolls.sort(function(a, b) {return b - a});
     d_rolls.sort(function(a, b) {return b - a});
 
-    o.innerHTML += "<br>Attacker rolls: " + a_rolls + "\n"
-    o.innerHTML += "<br>Defender rolls: " + d_rolls + "\n"
+    if (show) {
+        var o = document.getElementById("output");
+        o.innerHTML += "<br><br>Rank 4 - All Units\n";
+        o.innerHTML += "<br>Attacker rolls: " + a_rolls + "\n"
+        o.innerHTML += "<br>Defender rolls: " + d_rolls + "\n"
+    }
 
     if (d_rolls[0] >= a_rolls[0]) {
         done = remove(a, 1);
@@ -210,7 +254,9 @@ function rank4(a, d)
         done = remove(d, 1);
     }
     if (done) {
-        show_units(a, d)
+        if (show) {
+            show_units(a, d)
+        }
         return true;
     }
 
@@ -220,15 +266,72 @@ function rank4(a, d)
         done = remove(d, 1);
     }
     if (done) {
-        show_units(a, d)
+        if (show) {
+            show_units(a, d)
+        }
         return true;
     }
 
-    show_units(a, d);
+    if (show) {
+        show_units(a, d)
+    }
     return false;
 }
 
-function battle()
+
+function predict()
+{
+    var a0 = [parseInt(document.getElementById('s1').value),
+              parseInt(document.getElementById('a1').value),
+              parseInt(document.getElementById('c1').value),
+              parseInt(document.getElementById('f1').value)];
+    var d0 = [parseInt(document.getElementById('s2').value),
+              parseInt(document.getElementById('a2').value),
+              parseInt(document.getElementById('c2').value),
+              parseInt(document.getElementById('f2').value)];
+    var done = false;
+    var loops = 1000;
+    var success = 0;
+
+    var o = document.getElementById("output");
+
+    for (var i = 0; i < loops; i++) {
+        var a = a0.slice();
+        var d = d0.slice();
+
+        while (true) {
+            done = rank1(a, d, false);
+            if (done) {
+                break;
+            }
+
+            done = rank2(a, d, false);
+            if (done) {
+                break;
+            }
+
+            done = rank3(a, d, false);
+            if (done) {
+                break;
+            }
+
+            done = rank4(a, d, false);
+            if (done) {
+                break;
+            }
+        }
+
+        if (a.reduce(sum) > 0) {
+            success++;
+        }
+    }
+
+    o.innerHTML += "<br>Chance of successful attack: " + Math.round((100.0 * success) / loops) + "%\n";
+
+    return false;
+}
+
+function resolve()
 {
     var a = [parseInt(document.getElementById('s1').value),
              parseInt(document.getElementById('a1').value),
@@ -240,35 +343,36 @@ function battle()
              parseInt(document.getElementById('f2').value)];
     var done = false;
 
-    o = document.getElementById("output");
-
     while (true) {
-        done = rank1(a, d);
+        done = rank1(a, d, true);
         if (done) {
             break;
         }
 
-        done = rank2(a, d);
+        done = rank2(a, d, true);
         if (done) {
             break;
         }
 
-        done = rank3(a, d);
+        done = rank3(a, d, true);
         if (done) {
             break;
         }
 
-        done = rank4(a, d);
+        done = rank4(a, d, true);
         if (done) {
             break;
         }
     }
+
+    return false;
 }
 
-function clear()
+function wipe()
 {
-    document.getElementById("output").innerHTML = "";
-    return false;
+    var o = document.getElementById("output");
+
+    o.innerHTML = "";
 }
 
 </script>
@@ -300,8 +404,10 @@ function clear()
 <td><input type="text" value="0" id="f2"></td>
 </tr>
 </table>
-<button onclick="battle(); return false;">Battle!</button>
-<button onclick="return clear();">Clear</button>
+<button onclick="return predict();">Predict</button>
+<button onclick="return resolve();">Resolve</button>
+<button onclick="wipe(); return false;">Clear</button>
+<button onclick="wipe(); return true;">Reset</button>
 </form>
 
 <div id="output">
